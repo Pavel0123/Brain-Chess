@@ -1,0 +1,12 @@
+.field__container{
+  width: 45px;
+  height: 45px;
+}
+
+.field__container-white{
+  background-color:lightgrey;
+}
+
+.field__container-black{
+  background-color: black;
+}
