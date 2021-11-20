@@ -1,10 +1,10 @@
-.playScreen__body{
+.board__body{
   display: flex;
   justify-content: center;
 }
 
 
-.playScreen__board{
+.board__board{
   margin-top: 20px;
   width: 360px;
   border-radius: 5px;
@@ -12,13 +12,13 @@
   align-items: center;
 }
 
-.playScreen__container{
-  margin: 7.5px ;
+.board__container{
+  width: 360px;
   display: block;
   align-items: center;
 }
 
-.playScreen__pieceCard{
+.board__pieceCard{
   margin-top: 20px;
   margin-bottom: 20px;
   display: flex;
@@ -28,7 +28,7 @@
 
 
 
-.playScreen__container-icon{
+.board__container-icon{
   width: 40px;
   height: 40px;
   margin-right: 5px;

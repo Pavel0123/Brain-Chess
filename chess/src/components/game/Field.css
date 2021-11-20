@@ -1,6 +1,14 @@
 .field__container{
   width: 45px;
   height: 45px;
+  padding: 0%;
+  display: inline-block;
+}
+
+.field__container-icon{
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
 }
 
 .field__container-white{
@@ -8,5 +16,9 @@
 }
 
 .field__container-black{
-  background-color: black;
+  background-color:dimgrey;
+}
+
+.field__container-selected{
+  background-color:rgb(154, 156, 112);
 }

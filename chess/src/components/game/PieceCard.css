@@ -1,0 +1,15 @@
+.pieceCard__container{
+  background-color: #262421;
+  height: 80px;
+  width:50px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.pieceCard__card{
+  margin-top: 5px;
+  background-color: #201e1c;
+  height: 35px;
+  width:50px;
+  justify-content: center;
+}

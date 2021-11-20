@@ -1,5 +1,27 @@
 body {
   margin: 0;
+  background-color: #312e2b;
+  height: 100%;
+  width: 100%;
+}
+h1 {
+  font-family: sans-serif;
+  letter-spacing: 3px;
+  margin: 0;
+  color: lightgray;
+}
+
+h2 {
+  font-family: sans-serif;
+  letter-spacing: 2px;
+  margin: 0;
+  color: lightgray;
+}
+
+p {
+  font-family: sans-serif;
+  margin: 0;
+  color: lightgray;
 }
 
 .App {
