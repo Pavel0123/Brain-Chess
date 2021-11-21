@@ -20,7 +20,11 @@ export default function HomeScreen()  {
   }
 
   const Confirm = () => {
-    console.log(field);
+    let array = [];
+    field.map((element) => {
+      array.push(element.field ? element.field : 0);
+    });
+    console.log(array);
   }
 
   return(

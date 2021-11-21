@@ -59,13 +59,14 @@ export default function HomeScreen()  {
       serverResponse(firstField,secondField, playerColor)
     }
     else  {
-      serverResponse(63 -firstField,63 -secondField, playerColor)
+      serverResponse(63 -firstField,63 -secondField)
     }
   }
 
   //receice from server
-  function serverResponse(first , second, color) {
-    if(!color) {
+  function serverResponse(first , second) {
+    console.log(first+"ddd"+second)
+    if(!playerColor) {
       first = 63 - first;
       second = 63 - second ;
     }
