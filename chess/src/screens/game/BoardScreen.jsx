@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import { useParams } from 'react-router-dom';
 import Board from "../../components/game/Board"
 import PieceCard from "../../components/game/PieceCard"
 import Button from "../../components/Button";
@@ -12,10 +13,12 @@ import "./BoardScreen.css"
 
 export default function HomeScreen()  {
   const [field, setField] = useState(Array(64).fill(0));
-  const [figure, setFigure] = useState(0)
+  const [figure, setFigure] = useState(0);
+  const { id } = useParams();
 
   const handleClick = (i) => {
-    field[i] = {field: figure};
+    field[i].field === figure ? 
+      field[i] = {field: 0} : field[i] = {field: figure};
     setField([...field]);
   }
 
@@ -25,6 +28,7 @@ export default function HomeScreen()  {
       array.push(element.field ? element.field : 0);
     });
     console.log(array);
+    console.log(id)
   }
 
   return(
@@ -34,24 +38,12 @@ export default function HomeScreen()  {
         {<Board fields={field}  onClick={handleClick} />}
       </div>
       <div className="board__pieceCard">
-      <div onClick={() => setFigure(1)}>
-      <PieceCard cost={0} value={<WhiteKing className="board__container-icon" />}></PieceCard>
-      </div>
-      <div onClick={() => setFigure(2)}>
-      <PieceCard cost={7} value={<WhiteQueen className="board__container-icon" />}></PieceCard>
-      </div>
-      <div onClick={() => setFigure(3)}>
-      <PieceCard cost={5} value={<WhiteRook className="board__container-icon" />}></PieceCard>
-      </div>
-      <div onClick={() => setFigure(4)}>
-      <PieceCard cost={3} value={<WhiteBishop className="board__container-icon" />}></PieceCard>
-      </div>
-      <div onClick={() => setFigure(5)}>
-      <PieceCard cost={3} value={<WhiteHorse className="board__container-icon" />}></PieceCard>
-      </div>
-      <div onClick={() => setFigure(6)}>
-      <PieceCard cost={1} value={<WhitePawn className="board__container-icon" />}></PieceCard>
-      </div>
+      <PieceCard onClick={() => setFigure(1)} cost={0} value={<WhiteKing className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => setFigure(2)} cost={7} value={<WhiteQueen className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => setFigure(3)} cost={5} value={<WhiteRook className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => setFigure(4)} cost={3} value={<WhiteBishop className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => setFigure(5)} cost={3} value={<WhiteHorse className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => setFigure(6)} cost={1} value={<WhitePawn className="board__container-icon" />}></PieceCard>
       </div>
 
       <div onClick={Confirm}>

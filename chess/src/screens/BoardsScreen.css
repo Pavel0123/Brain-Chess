@@ -1,0 +1,18 @@
+.boardScreen__body{
+  display: flex;
+  justify-content: center;
+}
+
+.boardScreen__box{
+  margin: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.boardScreen__icon{
+  fill: lightgrey;
+  margin-top: 10px;
+  width: 130px;
+  height: 130px;
+  
+}

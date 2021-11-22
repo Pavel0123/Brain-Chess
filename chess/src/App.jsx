@@ -6,9 +6,12 @@ import {
   Navigate
 } from "react-router-dom";
 import Navbar from './components/Navbar.jsx';
+import FallbackScreen from "./screens/FallbackScreen.jsx"
 import HomeScreen from "./screens/HomeScreen.jsx";
 import PlayScreen from "./screens/game/PlayScreen.jsx"
-import BoardScreen from "./screens/game/BoardScreen.jsx"
+import BoardScreen from "./screens/BoardsScreen.jsx"
+import BoardsScreen from "./screens/game/BoardScreen.jsx"
+import AcountScreen from "./screens/AccountScreen.jsx"
 import './App.css';
 
 function App() {
@@ -16,17 +19,22 @@ function App() {
     <Routes>
       <Route path="" element={<Navigate replace to="/home" />}/>
       <Route path="/*" element={<Navigate replace to="/404" />}/>
-
+      
+      <Route path="/404" element={<FallbackScreen/>}/>
       <Route path="/home" element={<HomeScreen/>}/>
       <Route path="/play" element={<PlayScreen/>}/>
-      <Route path="/board" element={<BoardScreen/>}/>
+      <Route path="/account" element={<AcountScreen/>}/>
+      <Route path="/boards" element={<BoardScreen/>}/>
+      <Route path="/board-creator-:id" element={<BoardsScreen/>}/>
     </Routes>
   );
   return (
     <div className="App">
           <Router>
             <Navbar/>
+              <div className="container">
                 {routes}
+              </div>
            </Router>
     </div>
   );

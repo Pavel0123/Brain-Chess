@@ -1,0 +1,43 @@
+.homeScreen__icon1{
+  fill: lightgrey;
+  margin-top: 10px;
+  width: 130px;
+  height: 130px;
+}
+.homeScreen__icon2{
+  fill: lightgrey;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 130px;
+  height: 110px;
+}
+
+.homeScreen__body{
+  display: flex;
+  justify-content: center;
+}
+
+.homeScreen__container{
+  margin-top: 20px;
+  display: block;
+  align-items: center;
+}
+
+.homeScreen__box{
+  display: flex;
+  align-items: center;
+}
+
+
+.homeScreen__history{
+  margin-top: 10px;
+  position:absolute;
+  width: 100%;
+  background-color: #262421;
+  height: calc(100% - 280px);
+}
+.homeScreen__h1{
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0;
+}
