@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,8 +13,17 @@ import BoardScreen from "./screens/BoardsScreen.jsx"
 import BoardsScreen from "./screens/game/BoardScreen.jsx"
 import AcountScreen from "./screens/AccountScreen.jsx"
 import './App.css';
+import {login, logout, disconect, signIn, auth} from "./firebase"
 
 function App() {
+
+  useEffect(() => {
+    if(auth?.currentUser) {
+      login();
+      disconect();
+    }
+  }, [auth?.currentUser]);
+
   const routes = (
     <Routes>
       <Route path="" element={<Navigate replace to="/home" />}/>
