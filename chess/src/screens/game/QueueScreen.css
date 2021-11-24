@@ -1,0 +1,59 @@
+.queueScreen__icon1{
+  fill: lightgrey;
+  margin-top: 10px;
+  width: 130px;
+  height: 130px;
+}
+.queueScreen__icon2{
+  fill: lightgrey;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 130px;
+  height: 110px;
+}
+
+.queueScreen__button{
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.queueScreen__buttonLarge{
+  margin-top: 40px;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.queueScreen__body{
+  display: flex;
+  justify-content: center;
+}
+
+.queueScreen__container{
+  margin-top: 20px;
+  display: block;
+  align-items: center;
+}
+
+.queueScreen__box{
+  display: flex;
+  align-items: center;
+}
+
+
+.queueScreen__history{
+  z-index: -1;
+  margin-top: 10px;
+  position:absolute;
+  width: 100%;
+  background-color: #262421;
+  height: calc(100% - 280px);
+}
+.queueScreen__h1{
+  box-shadow: #201e1c 0px 1px 5px;
+  background-color: #201e1c;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0;
+}

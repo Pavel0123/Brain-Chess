@@ -1,4 +1,5 @@
-const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+admin.initializeApp();
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
@@ -7,3 +8,9 @@ const functions = require("firebase-functions");
 //   functions.logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+
+exports.deck = require("./game/addDeck");
+exports.add = require("./game/addQueue");
+
+exports.trigger = require("./triggers/QueueTrigger");

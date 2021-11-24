@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from "react";
 import Board from "../../components/game/Board"
+import { httpsCallable } from "firebase/functions";
+import {functions} from "../../firebase"
+import {auth} from "../../firebase"
+import { getDatabase, ref, onValue, update } from "firebase/database"
+import { child, get } from "firebase/database";
 import "./PlayScreen.css"
+import { getChannelzServiceDefinition } from "../../../functions/node_modules/@grpc/grpc-js/build/src";
 
 export default function HomeScreen()  {
   const [field, setField] = useState(Array(64).fill(0));
@@ -9,6 +15,7 @@ export default function HomeScreen()  {
   const [firstField, setFirstField] = useState(null);
   const [secondField, setSecondField] = useState(null);
 
+  const [game, setGame] = useState(null);
 //---------- testing const
   const shandleClick = (i) => {
     field[i] = {field: 2};
@@ -75,6 +82,34 @@ export default function HomeScreen()  {
     setField([...field]);
     setPlayerTurn(!playerTurn);
   }
+
+
+  useEffect(() => {
+    if(auth?.currentUser?.uid)  {
+      
+    getDeck();
+    }
+  },[auth?.currentUser?.uid]);
+
+  async function getDeck()  {
+    const db = ref(getDatabase());
+
+    await get(child(db, "users/"+ auth.currentUser.uid + "/")).then((result) => {
+      setGame(result?.val()?.game)
+    });
+
+    await get(child(db, "game/"+ game + "/")).then((result) => {
+      console.log(result.val())
+      if(result.val()?.deck) {
+      let array = [];
+      result.val().deck.map((element) => {
+        array.push({field: element});
+      });
+      setField(array);
+    }
+    });
+  }
+
 
 
   return(

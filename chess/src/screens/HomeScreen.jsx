@@ -18,7 +18,7 @@ export default function HomeScreen()  {
     </div>
     </div>
     <div className="homeScreen__history">
-      <h1 className="homeScreen__h1" >Match History</h1>
+      <h2 className="homeScreen__h1" >Match History</h2>
       
     </div>
     </div>

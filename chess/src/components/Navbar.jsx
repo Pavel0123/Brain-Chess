@@ -30,7 +30,7 @@ function Navbar() {
         </div>}
         
       </div>
-      {Link(Icon6, "Play", "/play")}
+      {Link(Icon6, "Play", "/queue")}
       {Link(Icon3, "Home", "/home")}
       {Link(Icon5, "Boards", "/boards")}
       {Link(Icon4, "Account", "/account")}
@@ -40,7 +40,7 @@ function Navbar() {
 
 
   useEffect(() => {
-    if(auth?.currentUser?.displayName) {
+    if(auth?.currentUser) {
       login();
       disconect();
     }
@@ -48,7 +48,7 @@ function Navbar() {
 
 
   function Link(Icon , text, onClick)  {
-    let navigate = useNavigate();
+    const navigate = useNavigate();
     return(
     <div onClick={() => {navigate(onClick); setchecked(!checked)}} className="Navbar__checked-box">
         <Icon className="Navbar__checked-icon"/>
