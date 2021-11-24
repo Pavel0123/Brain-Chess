@@ -12,7 +12,7 @@ export default function HomeScreen()  {
     <div className="homeScreen__body">
     <div className="homeScreen__container">
     <div className="homeScreen__box">
-       <BoardCard onClick={() => navigate("/play")} icon={<Icon2 className="homeScreen__icon2"/> } value={"Play"}/>
+       <BoardCard onClick={() => navigate("/queue")} icon={<Icon2 className="homeScreen__icon2"/> } value={"Play"}/>
        <BoardCard onClick={() => navigate("/boards")} icon={<Icon1 className="homeScreen__icon1"/> } value={"Boards"}/>
     </div>
     </div>

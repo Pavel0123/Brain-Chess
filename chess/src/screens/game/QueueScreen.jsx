@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./QueueScreen.css"
 import {useNavigate} from 'react-router-dom';
 import Button from "../../components/Button";
@@ -6,6 +6,7 @@ import { httpsCallable } from "firebase/functions";
 import {functions} from "../../firebase"
 import {auth} from "../../firebase"
 import { getDatabase, ref, onValue, update } from "firebase/database"
+import { child, get } from "firebase/database";
 
 export default function HomeScreen()  {
   const [type, setType] = useState(null);
@@ -17,9 +18,19 @@ export default function HomeScreen()  {
     push();
   }
 
+  useEffect(() => {
+    get(ref(db, '/game/'), (result) => {
+      const data = result.val() ;
+      for ( const key in data ) {
+        if (auth.currentUser.uid === data[key].playerBlack || auth.currentUser.uid === data[key].playerWhite ) {
+          addToGame(key)
+        } 
+      }
+    });
+  });
+
   onValue(ref(db, '/game/'), (result) => {
     const data = result.val() ;
-    // ...
     for ( const key in data ) {
       if (auth.currentUser.uid === data[key].playerBlack || auth.currentUser.uid === data[key].playerWhite ) {
         addToGame(key)

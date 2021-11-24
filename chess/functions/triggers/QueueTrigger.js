@@ -50,7 +50,7 @@ exports.startGame = functions.database.ref("/queue/3 min")
         counter = 0;
         deck2.map((element) => {
           if(counter >= 32)  {
-            array.push(element);
+            array.push(element + 10);
           }
           counter++;
         });
