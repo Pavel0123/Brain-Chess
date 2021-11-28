@@ -6,6 +6,18 @@
   overflow: hidden;
 }
 
+.pieceCard__container-click{
+  background-color: black;
+  padding-left: 3px;
+  padding-top: 12px;
+  height: 130px;
+  width:50px;
+  border-radius: 5px;
+  overflow: hidden;
+  color: gray;
+}
+
+
 .pieceCard__card{
   margin-top: 5px;
   background-color: #201e1c;
@@ -13,3 +25,5 @@
   width:50px;
   justify-content: center;
 }
+
+

@@ -1,5 +1,7 @@
+/* eslint-disable */
 const functions = require("firebase-functions");
 const {database} = require("firebase-admin");
+
 
 exports.startGame = functions.database.ref("/queue/3 min")
     .onUpdate(async (result, context) => {

@@ -7,12 +7,18 @@ import { getDatabase, ref, onValue, update } from "firebase/database"
 import { child, get } from "firebase/database";
 import "./PlayScreen.css"
 
-export default function HomeScreen()  {
+export default function PlayScreen()  {
   const [field, setField] = useState(Array(64).fill(0));
+
   const [playerTurn, setPlayerTurn] = useState(true);
   const [playerColor,setPlayerColor] = useState(true);
+
   const [firstField, setFirstField] = useState(null);
   const [secondField, setSecondField] = useState(null);
+  const [game, setGame] = useState(null);
+  
+  const db = getDatabase()
+
 //---------- testing const
   const shandleClick = (i) => {
     field[i] = {field: 2};
@@ -57,26 +63,61 @@ export default function HomeScreen()  {
   //sending to server
   function playerResponse() {
     if(playerColor){
-      serverResponse(firstField,secondField, playerColor)
+      push(63 -firstField,63 -secondField)
     }
     else  {
-      serverResponse(63 -firstField,63 -secondField)
+      push(firstField,secondField)
     }
+  }
+
+  async function push(from, to) {
+    const playTurn = httpsCallable(functions, 'play-playTurn');
+    await playTurn({ from: from, to: to, game: game })
+    .then((result) => {
+      const data = result.data;
+      console.log(data.status)
+
+    });
   }
 
   //receice from server
-  function serverResponse(first , second) {
-    console.log(first+"ddd"+second)
-    if(!playerColor) {
-      first = 63 - first;
-      second = 63 - second ;
-    }
-    field[second] = {field:field[first]?.field ,selected: false}
-    field[first] = {field:0 ,selected: false};
-    setField([...field]);
-    setPlayerTurn(!playerTurn);
-  }
+  async function receive(game, color)  {
 
+    await onValue(ref(db,"game/"+ game + "/"), async (result) => {
+      const data = result.val().turns ;
+      let array = result.val().deck;
+      let array1 = [];
+      let counter = 0;
+
+      array.map((element) => {
+        array1.push({field: element});
+      });     
+ 
+      if(array1) {
+      for ( const key in data ) {
+        let from = data[key].from;
+        let to = data[key].to;
+        
+        counter++; 
+        array1[to] = {field:array1[from]?.field ,selected: false}
+        array1[from] = {field:0 ,selected: false};
+      }
+      if(color) {
+        array1.reverse();
+      }
+      setField([...array1]);
+
+      if(counter%2 === 0) {
+        setPlayerTurn(color);
+      } else {
+        setPlayerTurn(!color);
+      }
+    }
+    });
+  }
+  
+
+//setup board
 
   useEffect(() => {
     if(auth?.currentUser?.uid)  {
@@ -90,6 +131,7 @@ export default function HomeScreen()  {
 
     await get(child(db, "users/"+ auth.currentUser.uid + "/")).then((result) => {
       game = result?.val()?.game;
+      setGame(game)
     });
 
     await get(child(db, "game/"+ game + "/")).then((result) => {
@@ -99,15 +141,17 @@ export default function HomeScreen()  {
         array.push({field: element});
       });
 
+      let color = true;
+
       if(result.val().playerWhite === auth.currentUser.uid) { 
-        setPlayerColor(!playerColor)
-        array.reverse();
-        setField(array);
+        setField(...[array]);
       }
       else {
-        setPlayerTurn(!playerTurn)
-        setField(array);
+        setPlayerColor(!playerColor)
+        color = false;
+        setField(...[array]);
       }
+      receive(game, color);
     }
     });
   }

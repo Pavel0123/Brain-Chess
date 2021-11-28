@@ -7,6 +7,20 @@
   vertical-align: middle;
 }
 
+.Button__container :hover{
+  height: 40px;
+  background-color: #000000;
+  border-radius: 5px;
+  color:gray;
+}
+
+.Button__container :active{
+  height: 40px;
+  background-color: #000000;
+  border-radius: 5px;
+  color:gray;
+}
+
 .Button__h2 {
   padding-top: 10px;
 }

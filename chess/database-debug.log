@@ -1,9 +1,2 @@
-21:43:37.052 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-21:43:37.366 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
-22:45:19.357 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
-22:45:19.386 [NamespaceSystem-akka.actor.default-dispatcher-23] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: brain-chess, brain-chess-default-rtdb
-22:45:19.391 [NamespaceSystem-akka.actor.default-dispatcher-24] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for brain-chess
-22:45:19.392 [NamespaceSystem-akka.actor.default-dispatcher-25] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for brain-chess-default-rtdb
-22:45:19.393 [NamespaceSystem-akka.actor.default-dispatcher-25] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for brain-chess-default-rtdb
-22:45:19.393 [NamespaceSystem-akka.actor.default-dispatcher-24] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for brain-chess
-22:45:19.405 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.
+09:48:45.186 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+09:48:45.421 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000

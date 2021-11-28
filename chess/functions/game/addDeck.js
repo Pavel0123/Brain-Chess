@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 const { database } = require("firebase-admin");
 
 exports.addDeck = functions.https.onCall(async(data, context) => {
+
   if(!context.auth.token) {
     return {
       status: "error"
@@ -9,11 +10,61 @@ exports.addDeck = functions.https.onCall(async(data, context) => {
   }
   const id = data.id;
   const deck = data.board;
-  await database().ref("decks/"+ context.auth.uid + "/" + id).update({id: id, deck: deck});
-  return {
-    status: "ok"
-  };
+  let name = data.name;
+  
+  if(name === "") {
+    name = "Board " + id;
+  }
+  if(check(deck)) {
+  await database().ref("decks/"+ context.auth.uid + "/" + id).update({id: id, deck: deck, name:name});
+  return {status: "ok"};
+  }
+  return {status: "error"};
 });
+
+function check(deck) {
+  let valid = true;
+  let place = 0;
+  let counter = 35;
+  let king = 0;
+  deck.map((element) => {
+    let x = element;
+    if(place < 48 && x !== 0) {
+      if(place >= 40 && x === 6) {
+      }
+      else {
+        valid = false;
+      }
+    }
+    switch(x) {
+    case 1:
+      king++;
+    break
+    case 2:
+      counter = counter - 7;
+    break
+    case 3:
+      counter = counter - 4;
+    break
+    case 4:
+      counter = counter - 3;
+    break
+    case 5:
+      counter = counter - 3;
+    break
+    case 6:
+      counter = counter - 1;
+    break
+    default:
+    }
+    place++;
+  });
+  if(king === 1 && counter >= 0 && valid) {
+    return true;
+  }
+  return false;
+}
+
 
 /*
 exports.addDeck = functions.https.onCall(async(data, context) => {
