@@ -1,0 +1,25 @@
+.userBox__container{
+  display: flex;
+  justify-content: space-between;
+  background-color: #201e1c;
+  width: 200px;
+  border-radius: 5px;
+  text-align: center;
+  vertical-align: middle;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 30px;
+  overflow: hidden;
+}
+
+.userBox__h2 {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.userBox__p {
+  font-size: 20px;
+}

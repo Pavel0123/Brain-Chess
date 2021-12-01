@@ -11,7 +11,7 @@ admin.initializeApp();
 
 
 exports.deck = require("./game/addDeck");
-exports.add = require("./game/addQueue");
-exports.play = require("./game/playTurn");
+exports.add = require("./game/queue");
+exports.play = require("./game/play");
 
 exports.trigger = require("./triggers/QueueTrigger");

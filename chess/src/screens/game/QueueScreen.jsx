@@ -11,15 +11,23 @@ import { child, get } from "firebase/database";
 export default function HomeScreen()  {
   const [type, setType] = useState(null);
   const [deck, setDeck] = useState(null);
+
+  const [queue, setQueue] = useState(false);
+  const [now, setNow] = useState(Date.now());
+  const [queueTime, setQueueTime] = useState(null);
   const db = getDatabase()
   const navigate = useNavigate();
+  
 
-  const [name1, setName1] = useState("");
-  const [name2, setName2] = useState("");
-  const [name3, setName3] = useState("");
-  const [name4, setName4] = useState("");
+  const [name1, setName1] = useState(undefined);
+  const [name2, setName2] = useState(undefined);
+  const [name3, setName3] = useState(undefined);
+  const [name4, setName4] = useState(undefined);
 
   function handleClick() {
+    setQueue(true)
+    setQueueTime(Date.now());
+    setNow(Date.now)
     push();
   }
 
@@ -34,6 +42,22 @@ export default function HomeScreen()  {
     });
   });
 
+  useEffect(() => {  
+    let interval = null;
+    if(queue) {
+      interval = setInterval(() => {
+      setNow(Date.now)
+    }, 1000);
+    }
+    else {
+      clearInterval(interval);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [queue]);
+
+  //check queue
   onValue(ref(db, '/game/'), (result) => {
     const data = result.val() ;
     for ( const key in data ) {
@@ -47,7 +71,8 @@ export default function HomeScreen()  {
     await update(ref(db, "users/"+ auth?.currentUser?.uid), {
         game: game
     });
-    navigate("/play")
+    setQueue(false);
+    navigate("/play");
   
   }
     //pull deck
@@ -62,10 +87,25 @@ export default function HomeScreen()  {
           setName4(result?.val()[4]?.name);
         }
       });
+
+      get(child(db, '/queue/3 min/' + auth.currentUser.uid + "/")).then((result) => {
+        if(result.val()) { 
+          setQueue(true)
+          setNow(Date.now)
+          setQueueTime(Date.now());    
+        }
+      });
+      get(child(db, '/queue/10 min/' + auth.currentUser.uid + "/")).then((result) => {
+        if(result.val()) { 
+          setQueue(true)
+          setNow(Date.now)
+          setQueueTime(Date.now());    
+        }
+      });
     }
     },[auth?.currentUser?.uid]);
 
-    //push deck
+    //push queue
     async function push() {
       const addQueue = httpsCallable(functions, 'add-addQueue');
       await addQueue({ board: deck, type: type })
@@ -75,12 +115,21 @@ export default function HomeScreen()  {
       });
     }
 
+    async function remove() {
+      const removeQueue = httpsCallable(functions, 'add-removeQueue');
+      await removeQueue()
+      .then((result) => {
+        const data = result.data;
+        console.log(data.status)
+        setQueue(false);
+      });
+    }
   return(
     <div>    
     <div className="queueScreen__body">
+      {!queue ?
     <div className="queueScreen__container">
-
-    <h2 >Game Time</h2>
+    <h2 >Game Mode</h2>
     <div className="queueScreen__box">
       <div onClick={() => setType("3 min")} className="queueScreen__button">
        <Button value={"3 min"} width={"150px"} clicked={type === "3 min" ? true : false}/>
@@ -114,6 +163,16 @@ export default function HomeScreen()  {
       : null}
     
     </div>
+    : 
+    <div className="queueScreen__container">
+      <div className="queueScreen__queue-box">
+        <h2>Thanks For Playing</h2>
+        <h3>Time: {Math.floor((now - queueTime) / 1000)}</h3>
+      </div>
+      <div onClick={() => remove()} >
+        <Button value={"Leave Queue"} width={"320px"}/>
+      </div> 
+    </div>}
     </div>
     </div>
 

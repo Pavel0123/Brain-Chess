@@ -19,7 +19,16 @@ h2 {
   color: lightgray;
 }
 
+h3 {
+  font-family: sans-serif;
+  letter-spacing: 2px;
+  margin: 0;
+  color: lightgray;
+  margin-top: 10px;
+}
+
 p {
+  letter-spacing: 1px;
   font-family: sans-serif;
   margin: 0;
   color: lightgray;

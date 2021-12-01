@@ -131,7 +131,7 @@ export default function HomeScreen()  {
 
       <div onClick={Confirm}>
       {!submit ?<Button width={"100%"} value={points === 0 ? "Confirm": points + " points"} />:null}
-      {submit ? <Input width={"100%"} onSubmit={handleSubmit}/> : null}
+      {submit ? <Input width={"356px"} onSubmit={handleSubmit}/> : null}
       </div>
       {error && <h2 className="board__h2">Invalid deck !!!</h2>}
     </div>

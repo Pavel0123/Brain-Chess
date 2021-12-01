@@ -37,6 +37,17 @@
   background-color: #262421;
   height: calc(100% - 280px);
 }
+
+.homeScreen__history-container{
+  overflow: hidden;
+  overflow-y: scroll;
+  z-index: -1;
+  margin-top: 10px;
+  width: 100%;
+
+  height: calc(100% - 60px);
+}
+
 .homeScreen__h1{
   box-shadow: #201e1c 0px 1px 5px;
   background-color: #201e1c;

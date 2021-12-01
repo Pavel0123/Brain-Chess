@@ -14,3 +14,17 @@ exports.addQueue = functions.https.onCall(async(data, context) => {
     status: "ok"
   };
 });
+
+
+exports.removeQueue = functions.https.onCall(async(data, context) => {
+  if(!context.auth.token) {
+    return {
+      status: "error"
+    }
+  }
+  await database().ref("queue/3 min/" + context.auth.uid).remove();
+  await database().ref("queue/10 min/" + context.auth.uid).remove();
+  return {
+    status: "ok"
+  };
+});

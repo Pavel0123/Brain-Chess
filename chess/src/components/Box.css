@@ -1,0 +1,21 @@
+.box__container{
+  margin-top: 20px;
+  background-color: #201e1c;
+  width: 200px;
+  border-radius: 5px;
+  text-align: center;
+  vertical-align: middle;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.box__h2 {
+  padding-top: 20px;
+}
+
+.box__p {
+  padding: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: justify;
+}

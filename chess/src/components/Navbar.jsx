@@ -12,7 +12,7 @@ import "./Navbar.css"
 
 function Navbar() {
   const [checked, setchecked] = useState(true);
- 
+  const navigate = useNavigate();
   
   const Unchecked = (
     <Icon1 onClick={() => setchecked(!checked)} className="Navbar__icon"></Icon1>
@@ -23,17 +23,26 @@ function Navbar() {
     <div className="Navbar__checked-container">
       <div className="Navbar__checked-head">
         <Icon2 onClick={() => setchecked(!checked)} className="Navbar__checked-icon"/>
-        {!auth.currentUser ? <div onClick={() => {signIn(); setchecked(!checked)}} >
+        {!auth.currentUser ? <div onClick={() => {navigate("/login"); setchecked(!checked)}} >
           <h2 className="Navbar__checked-h3">Login</h2>
-        </div> : <div onClick={() => {logout(); auth.signOut(); setchecked(!checked)}} >
+        </div> : <div onClick={() => {logout(); auth.signOut(); setchecked(!checked); navigate("/home"); window.location.reload()}} >
           <h2 className="Navbar__checked-h3">Logout</h2>
         </div>}
         
       </div>
-      {Link(Icon6, "Play", "/queue")}
-      {Link(Icon3, "Home", "/home")}
-      {Link(Icon5, "Boards", "/boards")}
-      {Link(Icon4, "Account", "/account")}
+      
+      {auth?.currentUser ?
+      <div>
+        {Link(Icon6, "Play", "/queue")}
+        {Link(Icon3, "Home", "/home")}
+        {Link(Icon5, "Boards", "/boards")}
+        {Link(Icon4, "Account", "/account")}
+      </div> :
+      <div>
+        {Link(Icon3, "Home", "/home")}
+        {Link(Icon4, "Login", "/login")}
+      </div> }
+      
     </div>
     </div>
   )
@@ -48,7 +57,6 @@ function Navbar() {
 
 
   function Link(Icon , text, onClick)  {
-    const navigate = useNavigate();
     return(
     <div onClick={() => {navigate(onClick); setchecked(!checked)}} className="Navbar__checked-box">
         <Icon className="Navbar__checked-icon"/>

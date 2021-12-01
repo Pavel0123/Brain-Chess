@@ -1,10 +1,13 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import Board from "../../components/game/Board"
 import { httpsCallable } from "firebase/functions";
 import {functions} from "../../firebase"
 import {auth} from "../../firebase"
 import { getDatabase, ref, onValue, update } from "firebase/database"
+import { ReactComponent as Icon4 } from "../../images/user-icon.svg" 
 import { child, get } from "firebase/database";
+import Button from "../../components/Button";
+
 import "./PlayScreen.css"
 
 export default function PlayScreen()  {
@@ -16,32 +19,24 @@ export default function PlayScreen()  {
   const [firstField, setFirstField] = useState(null);
   const [secondField, setSecondField] = useState(null);
   const [game, setGame] = useState(null);
+
+  const [playerWhiteTime, setPlayerWhiteTime] = useState(null);
+  const [playerBlackTime, setPlayerBlackTime] = useState(null);
+  const [playerWhiteRating, setPlayerWhiteRating] = useState(null);
+  const [playerBlackRating, setPlayerBlackRating] = useState(null);
+  const [playerWhite, setPlayerWhite] = useState(null);
+  const [playerBlack, setPlayerBlack] = useState(null);
+  const [winner, setWinner] = useState(null);
+  const [showWinner, setShowWinner] = useState(null);
+
   
   const db = getDatabase()
-
-//---------- testing const
-  const shandleClick = (i) => {
-    field[i] = {field: 2};
-    setField([...field]);
-    console.log(field)
-  }
-
-  const reverseBoard = () => {
-    if(playerColor) {
-    setPlayerColor(!playerColor)
-    field.reverse();
-    setField([...field]);
-  }
-  }
-  const changeTurn = () => {
-    setPlayerTurn(!playerTurn)
-  }
-
-//-----------
+  const countRef = useRef(null);
 
   const handleClick = (i) => {
     if(playerTurn) firstField === null ? setFirstField(i) : setSecondField(i);
   }
+
 
 
   useEffect(() => {
@@ -60,6 +55,55 @@ export default function PlayScreen()  {
 
   },[secondField]);
 
+  //manage time
+
+  useEffect(() => {
+    countRef.current = setInterval(() => { 
+      if(!winner)  {
+      if(playerColor) {
+        if(playerTurn) {
+            setPlayerWhiteTime((playerWhiteTime) => playerWhiteTime-1)
+          } else  {
+            setPlayerBlackTime((playerBlackTime) => playerBlackTime-1)
+          }
+      }
+      else{
+        if(playerTurn) {
+            setPlayerBlackTime((playerBlackTime) => playerBlackTime-1)
+          } else {
+            setPlayerWhiteTime((playerWhiteTime) => playerWhiteTime-1)
+          }
+      }     
+  }
+    }, 1000);
+    return () => {
+      clearInterval(countRef.current);
+    };
+  },[playerColor, playerTurn, winner]);
+
+
+  useEffect(() => {
+    if((playerBlackTime < 0 || playerWhiteTime < 0) && !winner)  {
+      const time = httpsCallable(functions, 'play-time');
+      time()
+      .then((result) => {
+        const data = result.data;
+        console.log(data.status)
+    });
+    }
+
+  },[playerBlackTime, playerWhiteTime]);
+
+
+  function time(time) {
+    const min = Math.floor(time / 60);
+    const seconds = time % 60;
+    if(min < 0 || seconds < 0)  {
+      return "0:00"
+    }
+    return min + ":" + seconds
+  }
+
   //sending to server
   function playerResponse() {
     if(playerColor){
@@ -76,7 +120,6 @@ export default function PlayScreen()  {
     .then((result) => {
       const data = result.data;
       console.log(data.status)
-
     });
   }
 
@@ -84,10 +127,18 @@ export default function PlayScreen()  {
   async function receive(game, color)  {
 
     await onValue(ref(db,"game/"+ game + "/"), async (result) => {
-      const data = result.val().turns ;
-      let array = result.val().deck;
+      const data = result?.val()?.turns ? result?.val()?.turns : [];
+      let array = result.val()?.deck;
       let array1 = [];
       let counter = 0;
+
+      if(!array)  {
+        end();
+        return;
+      }
+
+      setPlayerWhiteTime(result?.val()?.timeWhite)
+      setPlayerBlackTime(result?.val()?.timeBlack)
 
       array.map((element) => {
         array1.push({field: element});
@@ -97,10 +148,9 @@ export default function PlayScreen()  {
       for ( const key in data ) {
         let from = data[key].from;
         let to = data[key].to;
-        
+
+        array1 = playMove(array1, from, to); 
         counter++; 
-        array1[to] = {field:array1[from]?.field ,selected: false}
-        array1[from] = {field:0 ,selected: false};
       }
       if(color) {
         array1.reverse();
@@ -115,18 +165,55 @@ export default function PlayScreen()  {
     }
     });
   }
+
+  function playMove(array1, from, to) {
+    if(array1[from].field === 6 && to >= 56)  {
+      array1[to] = {field:2 ,selected: false}
+      array1[from] = {field:0 ,selected: false};
+      return array1;
+    }
+
+    if(array1[from].field === 16 && to <= 7)  {
+      array1[to] = {field:12 ,selected: false}
+      array1[from] = {field:0 ,selected: false};
+      return array1;
+    }
+
+    array1[to] = {field:array1[from]?.field ,selected: false}
+    array1[from] = {field:0 ,selected: false};
+    return array1
+  }
+
+  //surender 
+
+  const surender = () => {
+    const surender = httpsCallable(functions, 'play-surender');
+    surender()
+    .then((result) => {
+      const data = result.data;
+      console.log(data.status)
+    });
+  } 
   
 
-//setup board
+  //  game start
 
   useEffect(() => {
     if(auth?.currentUser?.uid)  {
     getDeck();
     }
-  },[auth?.currentUser?.uid]);
+    auth.onAuthStateChanged(() => {
+      if(auth?.currentUser?.uid)  {
+        getDeck();
+      }
+    });
+  },[]);
+
 
   async function getDeck()  {
     const db = ref(getDatabase());
+    let black;
+    let white;
     let game;
 
     await get(child(db, "users/"+ auth.currentUser.uid + "/")).then((result) => {
@@ -140,7 +227,8 @@ export default function PlayScreen()  {
       result.val().deck.map((element) => {
         array.push({field: element});
       });
-
+      white = result.val().playerWhite;
+      black = result.val().playerBlack;
       let color = true;
 
       if(result.val().playerWhite === auth.currentUser.uid) { 
@@ -154,21 +242,66 @@ export default function PlayScreen()  {
       receive(game, color);
     }
     });
+
+    await get(child(db, "users/"+ white + "/")).then((result) => {
+      setPlayerWhite(result?.val()?.name);
+      setPlayerWhiteRating(result?.val()?.rating);
+    });
+
+    await get(child(db, "users/"+ black + "/")).then((result) => {
+      setPlayerBlack(result?.val()?.name);
+      setPlayerBlackRating(result?.val()?.rating);
+    });
   }
 
+  // after game end 
+  
+  async function end()  {
+    const db = ref(getDatabase());
+    setPlayerTurn(false);
+    let game;
 
+    await get(child(db, "users/"+ auth.currentUser.uid + "/")).then((result) => {
+      game = result?.val()?.game;
+      setGame(game)
+    });
+
+
+    await get(child(db, "archived/"+ game + "/")).then((result) => {
+      setWinner(result?.val()?.winner);
+      setShowWinner(true)
+      console.log(result?.val()?.winner)
+      return;
+    });
+  }
 
 
   return(
     <div className="playScreen__body">
+      {showWinner?<div onClick={() => setShowWinner(false)} className="playScreen__win-navbar"><h1>{winner} won</h1></div> : null}
+      {showWinner ? <div onClick={() => setShowWinner(false)} className="playScreen__win-box"><h2 className="playScreen__win-h2" >New Rating</h2><h3 className="playScreen__win-h2" >
+        {playerColor ? playerWhiteRating: playerBlackRating} {(playerColor && winner === "white") || (!playerColor && winner === "black") ? "+": "-"} 10</h3></div> : null}
     <div className="playScreen__container">
+    <div className="playScreen__play-container">
+    <h2>( {!playerColor? playerWhiteRating : playerBlackRating} )</h2>
+      <div className="playScreen__player-box">
+        <h2 className="playScreen__h2" ><Icon4 className="playScreen__player-icon"/>{!playerColor? playerWhite : playerBlack}</h2>
+        <h2 className="playScreen__h2">{!playerColor? time(playerWhiteTime) : time(playerBlackTime)}</h2>
+    </div>
       <div className="playScreen__board">
         {<Board fields={field} onClick={handleClick} />}
       </div>
-      <button onClick={reverseBoard}>reverse</button>
-      <button onClick={changeTurn}>changeTurn</button>
-      <p>{playerColor? "white" : "black"}</p>
+      <div className="playScreen__player-box">
+        <h2 className="playScreen__h2"><Icon4 className="playScreen__player-icon"/>{playerColor? playerWhite : playerBlack}</h2>
+        <h2 className="playScreen__h2">{playerColor? time(playerWhiteTime) : time(playerBlackTime)}</h2>
+      </div>
+      <h2>( {playerColor? playerWhiteRating : playerBlackRating} )</h2>
+      </div>
+      <div className="playScreen__surender" onClick={surender}>
+      <Button value={"Surrender"} width={"100%"}/>
+      </div>
     </div>
+
     </div>
     
   )

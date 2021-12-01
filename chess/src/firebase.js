@@ -2,8 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore,  connectFirestoreEmulator  } from 'firebase/firestore';
 import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator } from "firebase/auth";
-import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
-import { getDatabase, ref, onDisconnect, update, connectDatabaseEmulator } from "firebase/database";
+import { getFunctions, connectFunctionsEmulator, httpsCallable } from "firebase/functions";
+import { getDatabase, ref, onDisconnect, update, connectDatabaseEmulator, get, child } from "firebase/database";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -34,6 +34,7 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 const db = getDatabase();
 
+
 // eslint-disable-next-line no-restricted-globals
 if(location.hostname === "localhost") {
   connectDatabaseEmulator(db, "localhost", 9000);
@@ -45,13 +46,28 @@ if(location.hostname === "localhost") {
 
 
 //functions on auth change
-export function login() {
+export async function login() {
+  const dbb = ref(getDatabase());
+  let rating = null;
+  await get(child(dbb, "users/"+ auth?.currentUser?.uid + "/")).then((result) => {
+    if(result?.val()?.rating) {
+      rating = result?.val()?.rating;
+    }
+  });
+
   if(auth?.currentUser) {
-  update(ref(db, "users/"+ auth?.currentUser?.uid), {
+  if(rating === null)  {
+  await update(ref(db, "users/"+ auth?.currentUser?.uid), {
     name: auth?.currentUser?.displayName,
       email: auth?.currentUser?.email,
-      state: "online"
+      state: "online",
+      rating: 800
   });
+  } else {
+    await update(ref(db, "users/"+ auth?.currentUser?.uid), {
+      state: "online",    
+    });
+  }
 }
 }
 
@@ -72,19 +88,15 @@ export function logout() {
       state: "offline"
   });
 }
-window.location.reload();
 }
 
-export function addDeck() {
-
-}
 
 export async function signIn() {
 await signInWithPopup(auth, provider)
   .then((result) => {
     login();
     disconect();
-    window.location.reload();
+    window.location.replace("/")
   });
 }
 
