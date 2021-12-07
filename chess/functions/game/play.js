@@ -136,6 +136,64 @@ exports.surender = functions.https.onCall(async(data, context) => {
 });
 
 
+exports.draw = functions.https.onCall(async(data, context) => {
+  const uid = context.auth.uid;
+  let game;
+  let playerWhite;
+  let drawWhite;
+  let drawBlack;
+  await database().ref("users/" + uid + "/")
+            .get().then((result) => {
+              const test = result.val();
+              game = test.game;
+  });
+
+  await database().ref("game/" + game + "/")
+  .get().then((result) => {
+    const test = result.val();
+    playerWhite = test.playerWhite;
+  });
+  
+  if(playerWhite === uid) {
+    await database().ref("game/"+ game + "/").update({drawWhite: true});
+  }
+  else {
+    await database().ref("game/"+ game + "/").update({drawBlack: true});
+  }
+
+  await database().ref("game/" + game + "/")
+  .get().then((result) => {
+    const test = result.val();
+    drawWhite = test?.drawWhite;
+    drawBlack = test?.drawBlack;
+  });
+
+  if(drawWhite && drawBlack)  {
+    archiveGame(game, "draw")
+  }
+
+  return {
+    status: "ok"
+  }
+});
+
+exports.drawDecline = functions.https.onCall(async(data, context) => {
+  const uid = context.auth.uid;
+  let game;
+  await database().ref("users/" + uid + "/")
+            .get().then((result) => {
+              const test = result.val();
+              game = test.game;
+  });
+
+  await database().ref("game/"+ game + "/").update({drawWhite: false, drawBlack: false});
+  
+  return {
+    status: "ok"
+  }
+});
+
+
 
 function checkWin(deck, turns, from , to) {
   const data = turns ;
@@ -206,12 +264,14 @@ async function archiveGame(game, winner) {
     playerBlackRating = values.rating;      
   });
 
+  if(winner !== "draw")  {
   if(winner === "white")  {
     await database().ref("users/" + playerWhite + "/").update({rating: playerWhiteRating + 10});
     await database().ref("users/" + playerBlack + "/").update({rating: playerBlackRating - 10});
   } else {
     await database().ref("users/" + playerWhite + "/").update({rating: playerWhiteRating - 10});
     await database().ref("users/" + playerBlack + "/").update({rating: playerBlackRating + 10});
+  }
   }
 
   await database().ref("archived/"+ game + "/").update({playerWhite: playerWhite
@@ -419,8 +479,10 @@ function checkRook(array , from, to)  {
 }
 
 function checkBishup(array , from, to)  {
-  const dif = from - to;
-  if(dif % 7 === 0)  {
+  //const dif = from - to;
+  console.log((from % 8 - to % 8) +  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
+  console.log((from % 8 - to % 8) -  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
+  if((from % 8 - to % 8) +  (Math.floor(from / 8) - Math.floor(to / 8)) === 0)  {
     const sum = (from - to) / 7;
     let count = from;
     for(let x = 0;x !== sum && x !== -sum ; x ++) {
@@ -436,7 +498,7 @@ function checkBishup(array , from, to)  {
     }
     return true;
   }
-  if(dif % 9 === 0 ){
+  if((from % 8 - to % 8) -  (Math.floor(from / 8) - Math.floor(to / 8)) === 0){
     const sum = (from - to) / 9;
     let count = from;
     for(let x = 0;x !== sum && x !== -sum ; x ++) {

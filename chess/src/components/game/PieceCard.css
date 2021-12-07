@@ -4,6 +4,7 @@
   width:50px;
   border-radius: 5px;
   overflow: hidden;
+  cursor: pointer
 }
 
 .pieceCard__container-click{
@@ -15,6 +16,7 @@
   border-radius: 5px;
   overflow: hidden;
   color: gray;
+  cursor: pointer
 }
 
 

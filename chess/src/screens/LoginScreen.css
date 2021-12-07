@@ -10,6 +10,7 @@
 }
 
 .LoginScreen__box{
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
   background-color: #201e1c;

@@ -3,6 +3,7 @@
   height: 45px;
   padding: 0%;
   display: inline-block;
+  cursor: pointer;
 }
 
 .field__container-icon{
@@ -14,11 +15,15 @@
 .field__container-white{
   background-color:lightgrey;
 }
-
+.field__container-white-filled{
+  background-color:rgb(207, 125, 125);
+}
 .field__container-black{
   background-color:dimgrey;
 }
-
+.field__container-black-filled{
+  background-color:rgb(102, 72, 72);
+}
 .field__container-selected{
   background-color:rgb(154, 156, 112);
 }

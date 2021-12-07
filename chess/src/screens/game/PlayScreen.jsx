@@ -5,10 +5,13 @@ import {functions} from "../../firebase"
 import {auth} from "../../firebase"
 import { getDatabase, ref, onValue, update } from "firebase/database"
 import { ReactComponent as Icon4 } from "../../images/user-icon.svg" 
+import { ReactComponent as Icon3 } from "../../images/flag-icon.svg" 
+import { ReactComponent as Icon2 } from "../../images/handshake-icon.svg" 
 import { child, get } from "firebase/database";
 import Button from "../../components/Button";
 
 import "./PlayScreen.css"
+import { Navigate, useNavigate } from "react-router";
 
 export default function PlayScreen()  {
   const [field, setField] = useState(Array(64).fill(0));
@@ -19,6 +22,8 @@ export default function PlayScreen()  {
   const [firstField, setFirstField] = useState(null);
   const [secondField, setSecondField] = useState(null);
   const [game, setGame] = useState(null);
+  const [deck, setDeck] = useState([]);
+  const [turns, setTurns] = useState([]);
 
   const [playerWhiteTime, setPlayerWhiteTime] = useState(null);
   const [playerBlackTime, setPlayerBlackTime] = useState(null);
@@ -28,13 +33,32 @@ export default function PlayScreen()  {
   const [playerBlack, setPlayerBlack] = useState(null);
   const [winner, setWinner] = useState(null);
   const [showWinner, setShowWinner] = useState(null);
-
+  const [surrend, setSurrend] = useState(null);
+  const [drawed, setDrawed] = useState(null);
   
+  const [counter, setCounter] = useState(0);
+  const [turnsCounter, setTurnsCounter] = useState(0);
+
+  const navigate = useNavigate();
   const db = getDatabase()
   const countRef = useRef(null);
 
   const handleClick = (i) => {
-    if(playerTurn) firstField === null ? setFirstField(i) : setSecondField(i);
+    if(counter !== turnsCounter)  {
+      setCounter(turnsCounter);
+      return;
+    } 
+    if(playerTurn)  {
+      firstField === null ? setFirstField(i) : setSecondField(i);
+    }
+  }
+
+  const handleCounter = (i) => {
+    if(counter + i <= turnsCounter && counter + i >= 0){
+      setFirstField(null);
+      setSecondField(null);
+      setCounter(counter + i)
+    }
   }
 
 
@@ -101,10 +125,59 @@ export default function PlayScreen()  {
     if(min < 0 || seconds < 0)  {
       return "0:00"
     }
-    return min + ":" + seconds
+    return min + ":" + (seconds < 10 ? "0" +seconds : seconds)
   }
 
+  // rollback turns
+
+  useEffect(() => {
+    const db = ref(getDatabase());
+    async function run()  {
+        let count = 0;
+        let turn = [];
+
+        for ( const key in turns ) {
+          if(count < counter) {
+          turn.push(turns[key]);
+          }
+          count++;
+        }
+        if(deck && turn) {
+          renderMoves(turn, deck); 
+        }
+
+    }
+    run();
+  },[counter]);
+
+  function renderMoves(data,deck)  {
+    let array1 = [];
+    let from;
+    let to;
+    deck.map((element) => {
+      array1.push({field: element});
+    });     
+
+    for ( const key in data ) {
+      from = data[key].from;
+      to = data[key].to;
+      
+      array1 = playMove(array1, from, to); 
+    }
+    if(from && to)  {
+      array1[from] = {field: array1[from].field, last: true}
+      array1[to] = {field: array1[to].field, last: true}
+    }
+
+    if(playerColor) {
+      array1.reverse();
+    }
+    setField(array1);
+  }
+
+
   //sending to server
+  
   function playerResponse() {
     if(playerColor){
       push(63 -firstField,63 -secondField)
@@ -124,47 +197,49 @@ export default function PlayScreen()  {
   }
 
   //receice from server
+
   async function receive(game, color)  {
 
     await onValue(ref(db,"game/"+ game + "/"), async (result) => {
       const data = result?.val()?.turns ? result?.val()?.turns : [];
       let array = result.val()?.deck;
-      let array1 = [];
       let counter = 0;
+  
+      const draw = result?.val()?.drawWhite || result?.val()?.drawBlack;
 
       if(!array)  {
         end();
         return;
       }
 
+      setDeck(array);
+      setTurns(data);
       setPlayerWhiteTime(result?.val()?.timeWhite)
-      setPlayerBlackTime(result?.val()?.timeBlack)
-
-      array.map((element) => {
-        array1.push({field: element});
-      });     
+      setPlayerBlackTime(result?.val()?.timeBlack)    
  
-      if(array1) {
       for ( const key in data ) {
-        let from = data[key].from;
-        let to = data[key].to;
-
-        array1 = playMove(array1, from, to); 
         counter++; 
       }
-      if(color) {
-        array1.reverse();
+
+
+      if(draw) {
+        setDrawed(true)
+      } else {
+        setDrawed(false)
       }
-      setField([...array1]);
+
+      setCounter(counter);
+      setTurnsCounter(counter)
 
       if(counter%2 === 0) {
         setPlayerTurn(color);
       } else {
         setPlayerTurn(!color);
       }
-    }
+    
     });
   }
+
 
   function playMove(array1, from, to) {
     if(array1[from].field === 6 && to >= 56)  {
@@ -189,6 +264,27 @@ export default function PlayScreen()  {
   const surender = () => {
     const surender = httpsCallable(functions, 'play-surender');
     surender()
+    .then((result) => {
+      const data = result.data;
+      console.log(data.status)
+    });
+  } 
+
+  //draw
+
+  const draw = () => {
+    const draw = httpsCallable(functions, 'play-draw');
+    draw()
+    .then((result) => {
+      const data = result.data;
+      console.log(data.status)
+    });
+  } 
+
+  const drawDecline = () => {
+    setDrawed(false);
+    const draw = httpsCallable(functions, 'play-drawDecline');
+    draw()
     .then((result) => {
       const data = result.data;
       console.log(data.status)
@@ -232,6 +328,7 @@ export default function PlayScreen()  {
       let color = true;
 
       if(result.val().playerWhite === auth.currentUser.uid) { 
+        array.reverse();
         setField(...[array]);
       }
       else {
@@ -275,12 +372,75 @@ export default function PlayScreen()  {
     });
   }
 
+  //components 
+
+  const returnHome = () => {
+    navigate("/queue");
+  }
+
+  const OptionCard = ({onClick,value, className}) => {
+    return(
+    <div onClick={onClick} className={className}>
+    <h2 className="playScreen__option-h2">{value}</h2>
+    </div>
+    )
+  }
+
+  const Menu = () => {
+    return(
+    <div className="playScreen__option">
+      <OptionCard onClick={() =>handleCounter(-1)} className={"playScreen__option-small-left"} value={"<"}/>
+      <OptionCard onClick={() =>setSurrend(true)} className={"playScreen__option-big"} value={<Icon3 className="playScreen__icon-big"/>}/>
+      <OptionCard onClick={() =>setDrawed(true)} className={"playScreen__option-big"} value={<Icon2 className="playScreen__icon-big"/>}/>
+      <OptionCard onClick={() =>handleCounter(+1)} className={"playScreen__option-small-right"} value={">"}/>
+    </div>
+    )
+  }
+
+  const Return = () => {
+    return(
+    <div className="playScreen__option">
+      <OptionCard onClick={() =>handleCounter(-1)} className={"playScreen__option-small-left"} value={"<"}/>
+      <div className="playScreen__option-biggest" onClick={returnHome}>
+        <h2 className="playScreen__option-h3">Return</h2>
+      </div>
+      <OptionCard onClick={() =>handleCounter(+1)} className={"playScreen__option-small-right"} value={">"}/>
+    </div>
+    )
+  }
+
+  const MenuSurrend = () => {
+    return(
+    <div className="playScreen__option">
+      <div className="playScreen__option-big-left" onClick={surender}>
+        <h2 className="playScreen__option-h3">Surrender</h2>
+      </div>
+      <div className="playScreen__option-big-right" onClick={() => setSurrend(false)}>
+        <h2 className="playScreen__option-h3">Cancel</h2>
+      </div>
+    </div>
+    )
+  }
+
+
+  const MenuDraw = () => {
+    return(
+    <div className="playScreen__option">
+      <div className="playScreen__option-big-left" onClick={draw}>
+        <h2 className="playScreen__option-h3">Draw</h2>
+      </div>
+      <div className="playScreen__option-big-right" onClick={drawDecline}>
+        <h2 className="playScreen__option-h3">Decline</h2>
+      </div>
+    </div>
+    )
+  }
 
   return(
     <div className="playScreen__body">
-      {showWinner?<div onClick={() => setShowWinner(false)} className="playScreen__win-navbar"><h1>{winner} won</h1></div> : null}
+      {showWinner?<div onClick={() => setShowWinner(false)} className="playScreen__win-navbar"><h1>{winner === "draw" ? "draw" : winner + " won"}</h1></div> : null}
       {showWinner ? <div onClick={() => setShowWinner(false)} className="playScreen__win-box"><h2 className="playScreen__win-h2" >New Rating</h2><h3 className="playScreen__win-h2" >
-        {playerColor ? playerWhiteRating: playerBlackRating} {(playerColor && winner === "white") || (!playerColor && winner === "black") ? "+": "-"} 10</h3></div> : null}
+        {playerColor ? playerWhiteRating: playerBlackRating} {(playerColor && winner === "white") || (!playerColor && winner === "black") ? "+": "-"} {winner === "draw" ? 0 : 10}</h3></div> : null}
     <div className="playScreen__container">
     <div className="playScreen__play-container">
     <h2>( {!playerColor? playerWhiteRating : playerBlackRating} )</h2>
@@ -297,11 +457,15 @@ export default function PlayScreen()  {
       </div>
       <h2>( {playerColor? playerWhiteRating : playerBlackRating} )</h2>
       </div>
-      <div className="playScreen__surender" onClick={surender}>
-      <Button value={"Surrender"} width={"100%"}/>
+      {winner? 
+        <Return/>
+      :
+      <div >
+        {surrend || drawed ? surrend ? <MenuSurrend/> : <MenuDraw/> : <Menu/>}
+          
       </div>
+      }
     </div>
-
     </div>
     
   )

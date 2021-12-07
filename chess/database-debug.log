@@ -1,9 +1,11 @@
-20:47:43.775 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
-20:47:44.028 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
-21:58:06.563 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
-21:58:06.594 [NamespaceSystem-akka.actor.default-dispatcher-20] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: brain-chess, brain-chess-default-rtdb
-21:58:06.603 [NamespaceSystem-akka.actor.default-dispatcher-27] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for brain-chess
-21:58:06.603 [NamespaceSystem-akka.actor.default-dispatcher-21] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for brain-chess-default-rtdb
-21:58:06.605 [NamespaceSystem-akka.actor.default-dispatcher-27] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for brain-chess
-21:58:06.605 [NamespaceSystem-akka.actor.default-dispatcher-21] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for brain-chess-default-rtdb
-21:58:06.614 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.
+14:33:44.016 [NamespaceSystem-akka.actor.default-dispatcher-5] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+14:33:44.320 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+15:19:17.934 [NamespaceSystem-akka.actor.default-dispatcher-23] INFO akka.actor.LocalActorRef - Message [com.firebase.core.namespace.client.DataPush] to Actor[akka://NamespaceSystem/user/brain-chess-default-rtdb/$d#846335008] was not delivered. [1] dead letters encountered. If this is not an expected behavior then Actor[akka://NamespaceSystem/user/brain-chess-default-rtdb/$d#846335008] may have terminated unexpectedly. This logging can be turned off or adjusted with configuration settings 'akka.log-dead-letters' and 'akka.log-dead-letters-during-shutdown'.
+15:19:17.935 [NamespaceSystem-akka.actor.default-dispatcher-23] INFO akka.actor.DeadLetterActorRef - Message [com.firebase.core.namespace.TooManyRequestsWithDelay] from Actor[akka://NamespaceSystem/user/$a#-1220523677] to Actor[akka://NamespaceSystem/deadLetters] was not delivered. [2] dead letters encountered. If this is not an expected behavior then Actor[akka://NamespaceSystem/deadLetters] may have terminated unexpectedly. This logging can be turned off or adjusted with configuration settings 'akka.log-dead-letters' and 'akka.log-dead-letters-during-shutdown'.
+16:04:57.712 [Thread-0] INFO com.firebase.server.forge.App$ - Attempting graceful shutdown.
+16:04:57.731 [NamespaceSystem-akka.actor.default-dispatcher-34] INFO com.firebase.core.namespace.Terminator$Terminator - 2 actors left to terminate: brain-chess, brain-chess-default-rtdb
+16:04:57.736 [NamespaceSystem-akka.actor.default-dispatcher-33] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for brain-chess
+16:04:57.738 [NamespaceSystem-akka.actor.default-dispatcher-33] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for brain-chess
+16:04:57.741 [NamespaceSystem-akka.actor.default-dispatcher-24] INFO com.firebase.core.namespace.NamespaceActor - Stopping namespace actor for brain-chess-default-rtdb
+16:04:57.741 [NamespaceSystem-akka.actor.default-dispatcher-24] INFO com.firebase.core.namespace.NamespaceActor - Gauges removed for brain-chess-default-rtdb
+16:04:57.747 [Thread-0] INFO com.firebase.server.forge.App$ - Graceful shutdown complete.

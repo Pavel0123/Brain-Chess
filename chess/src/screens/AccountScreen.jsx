@@ -37,9 +37,10 @@ export default function HomeScreen()  {
           if(data[game].playerBlack === auth?.currentUser?.uid && data[game].winner === "black" )  {
             winner = "Win"
           }
-          array.push(<UserBox key={game} value={winner} text={date.getDay()+"."+ date.getMonth() +"."+  date.getFullYear()} width={"300px"}/>)
+          array.push(<UserBox key={game} value={winner} text={date.getDate()+"."+ (date.getMonth() + 1) +"."+  date.getFullYear()} width={"300px"}/>)
         }
       }
+      array.reverse();
       setGames(array) 
       
     });

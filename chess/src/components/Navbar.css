@@ -26,6 +26,7 @@
   height: 30px;
   color: lightgray;
   filter: invert(80%);
+  cursor: pointer;
 }
 .Navbar__checked-icon{
   margin: 10px;
@@ -34,10 +35,12 @@
   height: 30px;
   color: lightgray;
   filter: invert(80%);
+  cursor: pointer;
 }
 
 .Navbar__checked-box{
   display: flex;
+  cursor: pointer;
 }
 
 .Navbar__checked-h2{
@@ -49,21 +52,23 @@
   margin-top: 7px;
   margin-right: 10px;
   font-size: 30px;
+  cursor: pointer;
 }
 
 .Navbar__checked-container{
   height: 100%;
   width: 100%;
   background-color: #262421;
-  position: absolute;
+  position: fixed;
   text-align: left;
-  z-index: 1;
+  z-index: 100;
 }
 
 .Navbar__checked-body{
   height: 100%;
   width: 100%;
   position: fixed;
+  z-index: 100;
 }
 
 .Navbar__checked-head{
@@ -73,4 +78,5 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  z-index: 100;
 }

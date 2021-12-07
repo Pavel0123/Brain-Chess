@@ -5,6 +5,7 @@
   border-radius: 5px;
   text-align: center;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .Button__container :hover{

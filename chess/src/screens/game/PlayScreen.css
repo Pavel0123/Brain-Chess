@@ -44,7 +44,7 @@
 
 .playScreen__win-navbar {
   padding-top:5px ;
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 40px;
   top:0px;
@@ -73,6 +73,13 @@
 
 }
 
+.playScreen__icon-big{
+  width: 30px;
+  height: 30px;
+  color: lightgray;
+  fill: lightgray;
+}
+
 .playScreen__player-icon{
   width: 22px;
   height: 22px;
@@ -91,5 +98,75 @@
 
 .playScreen__surender{
   margin-top: 15px;
+}
 
+.playScreen__option{
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-around;
+  width: 360px;
+  cursor: pointer;
+}
+
+.playScreen__option-big{
+  padding-top: 10px;
+  background-color: #201e1c;
+  height: 40px;
+  width: 110px;
+}
+
+.playScreen__option-biggest{
+  padding-top: 5px;
+  background-color: #201e1c;
+  height: 45px;
+  width: 220px;
+}
+
+.playScreen__option-small-left{
+  padding-top: 5px;
+  background-color: #201e1c;
+  height: 45px;
+  width: 70px;
+  border-top-left-radius: 5px;
+  border-end-start-radius: 5px;
+}
+
+.playScreen__option-small-right{
+  padding-top: 5px;
+  background-color: #201e1c;
+  height: 45px;
+  width: 70px;
+  border-top-right-radius: 5px;
+  border-end-end-radius: 5px;
+}
+
+.playScreen__option-big-left{
+  padding-top: 5px;
+  background-color: #201e1c;
+  height: 45px;
+  width: 180px;
+  border-top-left-radius: 5px;
+  border-end-start-radius: 5px;
+}
+
+.playScreen__option-big-right{
+  padding-top: 5px;
+  background-color: #201e1c;
+  height: 45px;
+  width: 180px;
+  border-top-right-radius: 5px;
+  border-end-end-radius: 5px;
+}
+
+.playScreen__option :hover{
+  background-color: black;
+}
+
+.playScreen__option-h2{
+  font-size: 30px;
+}
+
+.playScreen__option-h3{
+  padding-top: 5px;
+  font-size: 24px;
 }

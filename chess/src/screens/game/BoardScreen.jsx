@@ -118,7 +118,7 @@ export default function HomeScreen()  {
     <div className="board__body">
     <div className="board__container">
       <div className="board__board">
-        {<Board fields={field}  onClick={handleClick} />}
+        {<Board fields={field}  onClick={handleClick} filled={figure === 6 ? 40 : 48}/>}
       </div>
       <div className="board__pieceCard">
       <PieceCard onClick={() => king < 1 && setFigure(1)} clicked={figure === 1 ? true : false} cost={0} value={<WhiteKing className="board__container-icon" />}></PieceCard>
