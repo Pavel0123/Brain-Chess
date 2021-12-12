@@ -4,7 +4,8 @@
   width:50px;
   border-radius: 5px;
   overflow: hidden;
-  cursor: pointer
+  cursor: pointer;
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
 }
 
 .pieceCard__container-click{

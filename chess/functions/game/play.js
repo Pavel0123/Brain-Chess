@@ -43,7 +43,7 @@ exports.playTurn = functions.https.onCall(async(data, context) => {
     } 
   }
 
-  checkTime(game);
+  await checkTime(game);
 
   let counter = 0;
   for ( const key in turns ) {
@@ -75,18 +75,20 @@ exports.playTurn = functions.https.onCall(async(data, context) => {
   await database().ref("game/"+ game + "/turns/" + counter).update({from: from, to: to});
 
   if(checkWin(deck, turns, from , to) === "white")  {
-    archiveGame(game, "white")
+    await archiveGame(game, "white")
     return {
       status: "white"
     }
   }
 
   if(checkWin(deck, turns, from , to) === "black")  {
-    archiveGame(game, "black")
+    await archiveGame(game, "black")
     return {
       status: "black"
     }
   }
+
+  await checkDraw(game, deck, turns,from , to);
   
   return {
     status: "ok"
@@ -308,20 +310,81 @@ async function checkTime(game)  {
 
   if(counter % 2 === 1){
     if(timeBlack - timediff + 3 <= 0)  {
-      archiveGame(game,"white");
+      await archiveGame(game,"white");
       return true;
     }
   }
   else{
     if(timeWhite - timediff + 3 <= 0)  {
-      archiveGame(game,"black");
+      await archiveGame(game,"black");
       return true;
     }
   }
   return false;
 }
 
-//validate turn
+//check draw
+
+function checkDraw(game, array, data, from , to) {
+  let deck = [];
+  let counter = 0;
+
+  array.map((element) => {
+    deck.push({field: element});
+  });     
+
+  for ( const key in data ) {
+    let from = data[key].from;
+    let to = data[key].to;
+    
+    deck = playMove(deck, from, to )
+  }
+  deck[to] = {field:deck[from]?.field }
+  deck[from] = {field: 0};
+
+  deck.map((element) => {
+    let x = element.field;
+    switch(x) {
+    case 2:
+      counter = counter + 1;
+    break
+    case 3:
+      counter = counter + 1;
+    break
+    case 4:
+      counter = counter + 0.5;
+    break
+    case 5:
+      counter = counter + 0.5;
+    break
+    case 6:
+      counter = counter + 1;
+    break
+    case 12:
+      counter = counter + 1;
+    break
+    case 13:
+      counter = counter + 1;
+    break
+    case 14:
+      counter = counter + 0.5;
+    break
+    case 15:
+      counter = counter + 0.5;
+    break
+    case 16:
+      counter = counter + 1;
+    break
+    default:
+    }
+  });
+  console.log(counter + " counter");
+  if(counter < 1) {
+    archiveGame(game, "draw")
+  }
+}
+
+//validate turns
 
 function checkTurn(array, turns, from, to) {
   const data = turns ;
@@ -480,8 +543,8 @@ function checkRook(array , from, to)  {
 
 function checkBishup(array , from, to)  {
   //const dif = from - to;
-  console.log((from % 8 - to % 8) +  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
-  console.log((from % 8 - to % 8) -  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
+  //console.log((from % 8 - to % 8) +  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
+  //console.log((from % 8 - to % 8) -  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
   if((from % 8 - to % 8) +  (Math.floor(from / 8) - Math.floor(to / 8)) === 0)  {
     const sum = (from - to) / 7;
     let count = from;

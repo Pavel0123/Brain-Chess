@@ -22,15 +22,18 @@ export default function HomeScreen()  {
   const [points,setPoints] = useState(0)
   const [king,setKing] = useState(0)
   const [submit, setSubmit] = useState(false)
+  const [submitCounter, setSubmitCounter] = useState(0)
   const [error, setError] = useState(false)
 
   const navigate = useNavigate();
   const { id } = useParams();
 
   const handleClick = (i) => {
+    if((figure === 6 || figure === 0 ? 40 : 48) <= i)  {
     field[i].field === figure ? 
       field[i] = {field: 0} : field[i] = {field: figure};
     setField([...field]);
+    }
   }
 
   const handleSubmit = (event) => {
@@ -39,7 +42,7 @@ export default function HomeScreen()  {
     field.map((element) => {
       array.push(element.field ? element.field : 0);
     });
-    push(array, event.target[0].value)
+    push(array, event?.target[0]?.value)
   }
 
   useEffect(() => {
@@ -69,7 +72,8 @@ export default function HomeScreen()  {
       default:
       }
     });
-    if(king === 1 && figure === 1) {
+    if((king === 1 && figure === 1) || (counter < 7 && figure === 2) || (counter < 4 && figure === 3) ||
+     (counter < 3 && figure === 4) || (counter < 3 && figure === 5) || (counter < 1 && figure === 6)) {
       setFigure(0);
     }
     setKing(king)
@@ -78,7 +82,18 @@ export default function HomeScreen()  {
 
 
   const Confirm = () => {
+    if(king === 1)  {
     setSubmit(true);
+    setFigure(0);
+    setSubmitCounter(submitCounter+1);
+    }
+    if(submitCounter >= 3) {
+      let array = [];
+    field.map((element) => {
+      array.push(element.field ? element.field : 0);
+    });
+    push(array, "Board " + id)
+    }
   }
 
   //push deck
@@ -116,22 +131,22 @@ export default function HomeScreen()  {
 
   return(
     <div className="board__body">
-    <div className="board__container">
+    <div className="boardScreen__container">
       <div className="board__board">
         {<Board fields={field}  onClick={handleClick} filled={figure === 6 ? 40 : 48}/>}
       </div>
       <div className="board__pieceCard">
       <PieceCard onClick={() => king < 1 && setFigure(1)} clicked={figure === 1 ? true : false} cost={0} value={<WhiteKing className="board__container-icon" />}></PieceCard>
-      <PieceCard onClick={() => setFigure(2)} clicked={figure === 2 ? true : false} cost={7} value={<WhiteQueen className="board__container-icon" />}></PieceCard>
-      <PieceCard onClick={() => setFigure(3)} clicked={figure === 3 ? true : false} cost={4} value={<WhiteRook className="board__container-icon" />}></PieceCard>
-      <PieceCard onClick={() => setFigure(4)} clicked={figure === 4 ? true : false} cost={3} value={<WhiteBishop className="board__container-icon" />}></PieceCard>
-      <PieceCard onClick={() => setFigure(5)} clicked={figure === 5 ? true : false} cost={3} value={<WhiteHorse className="board__container-icon" />}></PieceCard>
-      <PieceCard onClick={() => setFigure(6)} clicked={figure === 6 ? true : false} cost={1} value={<WhitePawn className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => points >= 7 && setFigure(2)} clicked={figure === 2 ? true : false} cost={7} value={<WhiteQueen className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => points >= 4 && setFigure(3)} clicked={figure === 3 ? true : false} cost={4} value={<WhiteRook className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => points >= 3 && setFigure(4)} clicked={figure === 4 ? true : false} cost={3} value={<WhiteBishop className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => points >= 3 && setFigure(5)} clicked={figure === 5 ? true : false} cost={3} value={<WhiteHorse className="board__container-icon" />}></PieceCard>
+      <PieceCard onClick={() => points >= 1 && setFigure(6)} clicked={figure === 6 ? true : false} cost={1} value={<WhitePawn className="board__container-icon" />}></PieceCard>
       </div>
 
       <div onClick={Confirm}>
-      {!submit ?<Button width={"100%"} value={points === 0 ? "Confirm": points + " points"} />:null}
-      {submit ? <Input width={"356px"} onSubmit={handleSubmit}/> : null}
+      {!submit ?<Button width={"100%"} value={points === 0 ? king === 0 ? "Place King" : "Confirm": points + " points"} />:null}
+      {submit ? <Input placeholder={"Name"} width={"356px"} onSubmit={handleSubmit}/> : null}
       </div>
       {error && <h2 className="board__h2">Invalid deck !!!</h2>}
     </div>

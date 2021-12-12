@@ -67,7 +67,7 @@ function Navbar() {
   return(
     <div className="Navbar__container">
       <div className="Navbar__switch" >{checked ? Unchecked : Checked}</div>
-      <h1 className="Navbar__h1">Brain Chess</h1>
+      <h1 className="Navbar__h1">{"Brain Chess"}</h1>
     </div> 
   )
 }

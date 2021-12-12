@@ -17,29 +17,46 @@
 
 
 .accountScreen__history{
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
+  border-radius: 5px;
+  margin-left: auto;
+  margin-right: auto;
   z-index: -1;
-  margin-top: 10px;
-  position:absolute;
-  width: 100%;
+  width: 340px;
   background-color: #262421;
-  height: calc(100% - 300px);
-  
+  height: calc(100vh - 400px);
 }
 
 .accountScreen__history-container{
   overflow: hidden;
   overflow-y: scroll;
   z-index: -1;
-  margin-top: 10px;
+  padding-top: 20px;
   width: 100%;
-
-  height: calc(100% - 60px);
+  background-color: #262421;
+  height: calc(100% - 70px);
+  margin-bottom: 30px;
 }
 
 .accountScreen__h1{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   box-shadow: #201e1c 0px 1px 5px;
   background-color: #201e1c;
   padding-top: 10px;
   padding-bottom: 10px;
   margin: 0;
+}
+
+.accountScreen__shadow{
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
+  margin-bottom: 30px;
+}
+
+@media only screen and (min-width: 900px) {
+
+  .accountScreen__container{
+    margin-top: -10%;
+    
+  }
 }

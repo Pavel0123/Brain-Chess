@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore,  connectFirestoreEmulator  } from 'firebase/firestore';
-import { getAuth, signInWithPopup, GoogleAuthProvider, connectAuthEmulator } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider , connectAuthEmulator } from "firebase/auth";
 import { getFunctions, connectFunctionsEmulator, httpsCallable } from "firebase/functions";
 import { getDatabase, ref, onDisconnect, update, connectDatabaseEmulator, get, child } from "firebase/database";
 
@@ -31,7 +31,8 @@ const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 const functions = getFunctions(app);
 const auth = getAuth();
-const provider = new GoogleAuthProvider();
+const providerGoogle = new GoogleAuthProvider();
+const providerFacebook = new FacebookAuthProvider();
 const db = getDatabase();
 
 
@@ -83,21 +84,28 @@ export function disconect() {
 export function logout() {
   if(auth?.currentUser) {
   update(ref(db, "users/"+ auth?.currentUser?.uid), {
-    name: auth?.currentUser?.displayName,
-      email: auth?.currentUser?.email,
       state: "offline"
   });
 }
 }
 
 
-export async function signIn() {
-await signInWithPopup(auth, provider)
-  .then((result) => {
-    login();
-    disconect();
-    window.location.replace("/")
-  });
+export async function signIn(provider) {
+if(provider === "google") {
+  await signInWithPopup(auth, providerGoogle)
+    .then((result) => {
+      login();
+      disconect();
+      window.location.replace("/")
+    });
+  } else {
+    await signInWithPopup(auth, providerFacebook)
+    .then((result) => {
+      login();
+      disconect();
+      window.location.replace("/")
+    });
+  }
 }
 
 

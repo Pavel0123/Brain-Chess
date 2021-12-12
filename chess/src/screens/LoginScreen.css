@@ -5,11 +5,13 @@
 
 .LoginScreen__container{
   margin-top: 20px;
+  height: 400px;
   display: block;
   align-items: center;
 }
 
 .LoginScreen__box{
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;

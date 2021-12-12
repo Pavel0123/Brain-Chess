@@ -9,7 +9,9 @@ h1 {
   font-family: sans-serif;
   letter-spacing: 2px;
   margin: 0;
-  color: lightgray;
+  background: -webkit-linear-gradient(90deg, rgb(214, 179, 75) 0%, rgba(136,129,16,1) 53%, rgba(147,106,1,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 h2 {
@@ -74,5 +76,19 @@ p {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+
+@media only screen and (min-width: 900px) {
+  .container {
+    position: fixed;
+    width: 60%;
+    margin-left: 40%;
+    margin-top: 0;
+    padding-top: 0;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
   }
 }

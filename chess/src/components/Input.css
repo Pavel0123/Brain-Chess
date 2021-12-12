@@ -7,6 +7,9 @@
   border-radius: 5px;
   text-align: center;
   vertical-align: middle;
+  max-width: 360px;
+  max-height: 48px;
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
 }
 
 input:focus::placeholder {

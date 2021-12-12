@@ -6,6 +6,7 @@
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
 }
 
 .Button__container :hover{

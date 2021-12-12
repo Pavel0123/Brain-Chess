@@ -1,3 +1,4 @@
+
 .Navbar__container {
   width: 100%;
   height: 50px;
@@ -24,8 +25,7 @@
   margin-left: 5px;
   width: 30px;
   height: 30px;
-  color: lightgray;
-  filter: invert(80%);
+  fill: lightgray;
   cursor: pointer;
 }
 .Navbar__checked-icon{
@@ -33,10 +33,10 @@
   margin-right: 30px;
   width: 30px;
   height: 30px;
-  color: lightgray;
-  filter: invert(80%);
+  fill: lightgray;
   cursor: pointer;
 }
+
 
 .Navbar__checked-box{
   display: flex;
@@ -53,6 +53,9 @@
   margin-right: 10px;
   font-size: 30px;
   cursor: pointer;
+  background: -webkit-linear-gradient(90deg, rgb(214, 179, 75) 0%, rgba(136,129,16,1) 53%, rgba(147,106,1,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .Navbar__checked-container{
@@ -79,4 +82,49 @@
   display: flex;
   justify-content: space-between;
   z-index: 100;
+}
+
+@media only screen and (min-width: 900px) {
+  .Navbar__container {
+    width: 40%;
+    height: 100%;
+  }
+  .Navbar__checked-container{
+    width: calc(320px);
+    padding-left: auto;
+    height: 100%;
+    background-color: #201e1c;
+    position: fixed;
+  }
+
+  .Navbar__checked-body{
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: calc(40% - 60px);
+    position: fixed;
+  }
+
+  .Navbar__h1 {
+    height: 100%;
+    width: 40%;
+    position: fixed;
+    top: 40%;
+    height: 40px;
+    font-size: 40px;
+    z-index: 100;
+    pointer-events:none; 
+  }
+
+
+  .Navbar__switch{
+    position: fixed;
+    top: calc(40% + 5px);
+    width: calc(40% - 330px);
+    z-index: 90;
+  }
+
+  .Navbar__checked-h3{
+    display: none;
+  }
 }
