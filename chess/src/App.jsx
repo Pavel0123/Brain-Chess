@@ -14,6 +14,7 @@ import BoardsScreen from "./screens/game/BoardScreen.jsx"
 import AcountScreen from "./screens/AccountScreen.jsx"
 import QueueScreen from "./screens/game/QueueScreen.jsx"
 import LoginScreen from "./screens/LoginScreen.jsx"
+import FiguresScreen from "./screens/FiguresScreen.jsx"
 import './App.css';
 import { getAuth } from "firebase/auth";
 import {login, logout, disconect, signIn} from "./firebase"
@@ -45,6 +46,7 @@ function App() {
       <Route path="/404" element={<FallbackScreen/>}/>
       <Route path="/home" element={<HomeScreen/>}/>
       <Route path="/login" element={<LoginScreen/>}/>
+      <Route path="/figures" element={<FiguresScreen/>}/>
   
       <Route path="/queue" element={<Queue/>}/>
       <Route path="/play" element={<PlayScreen/>}/>

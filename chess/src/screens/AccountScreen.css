@@ -53,6 +53,10 @@
   margin-bottom: 30px;
 }
 
+.clickable{
+  cursor: pointer;
+}
+
 @media only screen and (min-width: 900px) {
 
   .accountScreen__container{

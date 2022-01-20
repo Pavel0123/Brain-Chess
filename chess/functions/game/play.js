@@ -1,4 +1,4 @@
-const functions = require("firebase-functions");
+const functions = require("firebase-functions").region('europe-west1');
 const { database } = require("firebase-admin");
 
 exports.playTurn = functions.https.onCall(async(data, context) => {
@@ -221,10 +221,10 @@ function checkWin(deck, turns, from , to) {
   for ( const key in array1 ) {
     let field = array1[key].field;
     
-    if(field === 1) {
+    if(field === 1 || field === 7) {
       whiteking = true;
     }
-    if(field === 11) {
+    if(field === 11 || field === 17) {
       blackking = true;
     }
   }
@@ -439,6 +439,15 @@ function checkTurn(array, turns, from, to) {
     case 6:
       valid = checkWhitePawn(array1,from,to)
     break;
+    case 7:
+      valid = checkKing(array1,from,to)
+    break;
+    case 8:
+      valid = checkDragon(array1,from,to)
+    break;
+    case 9:
+      valid = checkGuard(array1,from,to)
+    break;
     case 11:
       valid = checkKing(array1,from,to)
     break;
@@ -456,6 +465,15 @@ function checkTurn(array, turns, from, to) {
     break;
     case 16:
       valid = checkBlackPawn(array1,from,to)
+    break;
+    case 17:
+      valid = checkKing(array1,from,to)
+    break;
+    case 18:
+      valid = checkDragon(array1,from,to)
+    break;
+    case 19:
+      valid = checkGuard(array1,from,to)
     break;
     default:
   }
@@ -486,12 +504,34 @@ function playMove(array1, from, to) {
 //figures moves
 
 function checkKing(array , from, to)  {
+  if((from -9 === to || from -1 === to || from +7 === to) && from % 8 === 0)  {
+    return false;
+  }
+  if((from +9 === to || from +1 === to || from -7 === to) && from % 8 === 7)  {
+    return false;
+  }
+
   if(from +8 === to || from -8 === to || from +1 === to || from -1 === to)  {
     return true;
   }
   if(from +7 === to || from -7 === to || from +9 === to || from -9 === to)  {
     return true;
   }
+  return false;
+}
+
+function checkGuard(array , from, to)  {
+  if(from -1 === to && from % 8 === 0)  {
+    return false;
+  }
+  if(from +1 === to && from % 8 === 7)  {
+    return false;
+  }
+
+  if(from +8 === to || from -8 === to || from +1 === to || from -1 === to)  {
+    return true;
+  }
+
   return false;
 }
 
@@ -542,9 +582,6 @@ function checkRook(array , from, to)  {
 }
 
 function checkBishup(array , from, to)  {
-  //const dif = from - to;
-  //console.log((from % 8 - to % 8) +  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
-  //console.log((from % 8 - to % 8) -  (Math.floor(from / 8) - Math.floor(to / 8) === 0))
   if((from % 8 - to % 8) +  (Math.floor(from / 8) - Math.floor(to / 8)) === 0)  {
     const sum = (from - to) / 7;
     let count = from;
@@ -582,16 +619,32 @@ function checkBishup(array , from, to)  {
 }
 
 function checkHorse(array , from, to)  {
-  if(from +15 === to || from -15 === to || from +17 === to || from -17 === to)  {
+  if((from % 8 - to % 8 === 1 || from % 8 - to % 8 === -1) && (Math.floor(from / 8) - Math.floor(to / 8) === 2 || Math.floor(from / 8) - Math.floor(to / 8) === -2))  {
     return true;
   }
-  if(from +6 === to || from -6 === to || from +10 === to || from -10 === to)  {
+  if((from % 8 - to % 8 === 2 || from % 8 - to % 8 === -2) && (Math.floor(from / 8) - Math.floor(to / 8) === 1 || Math.floor(from / 8) - Math.floor(to / 8) === -1))  {
+    return true;
+  }
+  return false;
+}
+
+function checkDragon(array , from, to)  {
+  if((from % 8 - to % 8 === 1 || from % 8 - to % 8 === -1) && (Math.floor(from / 8) - Math.floor(to / 8) === 2 || Math.floor(from / 8) - Math.floor(to / 8) === -2))  {
+    return true;
+  }
+  if((from % 8 - to % 8 === 2 || from % 8 - to % 8 === -2) && (Math.floor(from / 8) - Math.floor(to / 8) === 1 || Math.floor(from / 8) - Math.floor(to / 8) === -1))  {
+    return true;
+  }
+  if((from % 8 - to % 8 === 2 || from % 8 - to % 8 === -2) && (Math.floor(from / 8) - Math.floor(to / 8) === 2 || Math.floor(from / 8) - Math.floor(to / 8) === -2))  {
     return true;
   }
   return false;
 }
 
 function checkWhitePawn(array , from, to)  {
+  if(Math.floor(from / 8) - Math.floor(to / 8) !== -1) {
+    return false;
+  }
   if(from +8 === to && (array[to].field === 0 || array[to].field === 10))  {
     return true;
   }
@@ -602,6 +655,9 @@ function checkWhitePawn(array , from, to)  {
 }
 
 function checkBlackPawn(array , from, to)  {
+  if(Math.floor(from / 8) - Math.floor(to / 8) !== 1) {
+    return false;
+  }
   if(from -8 === to && (array[to].field === 0 || array[to].field === 10))  {
     return true;
   }

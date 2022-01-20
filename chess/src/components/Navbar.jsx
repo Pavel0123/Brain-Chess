@@ -5,6 +5,7 @@ import { ReactComponent as Icon3 } from "../images/home-icon.svg"
 import { ReactComponent as Icon4 } from "../images/user-icon.svg" 
 import { ReactComponent as Icon5 } from "../images/chess-board-icon.svg" 
 import { ReactComponent as Icon6 } from "../images/play-icon.svg" 
+import { ReactComponent as Icon7 } from "../images/figure-icon.svg" 
 import {useNavigate} from 'react-router-dom';
 import {login, logout, disconect, signIn, auth} from "../firebase"
 
@@ -35,11 +36,13 @@ function Navbar() {
       <div>
         {Link(Icon6, "Play", "/queue")}
         {Link(Icon3, "Home", "/home")}
+        {Link(Icon7, "Figures", "/figures")}
         {Link(Icon5, "Boards", "/boards")}
         {Link(Icon4, "Account", "/account")}
       </div> :
       <div>
         {Link(Icon3, "Home", "/home")}
+        {Link(Icon7, "Figures", "/figures")}
         {Link(Icon4, "Login", "/login")}
       </div> }
       

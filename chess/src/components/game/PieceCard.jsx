@@ -4,7 +4,7 @@ import "./PieceCard.css"
 const PieceCard = ({ value, cost, onClick, clicked }) => {
 
   return( 
-  <div onClick={onClick} className="pieceCard__container" style={clicked ?{backgroundColor: "black", borderRadius: "5px"}: null}>
+  <div onClick={onClick} className="pieceCard__container noselect" style={clicked ?{backgroundColor: "black", borderRadius: "5px"}: null}>
   {value}
   <div className="pieceCard__card" style={clicked ? {backgroundColor: "black", borderRadius: "5px"}: null}>
     <h2>{cost}</h2>

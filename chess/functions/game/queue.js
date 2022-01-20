@@ -1,4 +1,4 @@
-const functions = require("firebase-functions");
+const functions = require("firebase-functions").region('europe-west1');
 const { database } = require("firebase-admin");
 
 exports.addQueue = functions.https.onCall(async(data, context) => {

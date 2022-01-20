@@ -5,7 +5,7 @@ import "./BoardCard.css"
 const PieceCard = ({icon, value, onClick }) => {
   
   return( 
-<div onClick={onClick} className="boardCard__container">
+<div onClick={onClick} className="boardCard__container noselect">
   {icon}
   <div className="boardCard__card">
   <h2 className="boardCard__h2">{value}</h2>

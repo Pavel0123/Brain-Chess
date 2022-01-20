@@ -37,3 +37,22 @@
   height: 40px;
   margin-right: 5px;
 }
+
+
+.board__card-container{
+  background-color: #201e1c;
+  height: 80px;
+  width:50px;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
+}
+
+.board__card-container:hover{
+  background-color: black;
+}
+.board__card-text{
+  margin-top: 15px;
+  font-size: 35px;
+}

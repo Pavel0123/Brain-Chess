@@ -29,7 +29,7 @@ let firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
-const functions = getFunctions(app);
+const functions = getFunctions(app,"europe-west1");
 const auth = getAuth();
 const providerGoogle = new GoogleAuthProvider();
 const providerFacebook = new FacebookAuthProvider();

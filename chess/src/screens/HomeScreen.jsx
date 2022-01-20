@@ -4,6 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import { ReactComponent as Icon1 } from "../images/board-icon.svg" 
 import { ReactComponent as Icon2 } from "../images/play-icon.svg" 
 import { ReactComponent as Icon3 } from "../images/user-icon.svg" 
+import { ReactComponent as Icon7 } from "../images/figure-icon.svg" 
 import { ReactComponent as Icon4 } from "../images/figures/White-King.svg" 
 import { ReactComponent as Icon5 } from "../images/figures/White-Queen.svg" 
 import { ReactComponent as Icon6 } from "../images/figures/White-Rook.svg" 
@@ -39,6 +40,7 @@ export default function HomeScreen()  {
     </div>
     : 
     <div className="homeScreen__box">
+      <BoardCard onClick={() => navigate("/figures")} icon={<Icon7 className="homeScreen__icon2"/> } value={"Figures"}/>
       <BoardCard onClick={() => navigate("/login")} icon={<Icon3 className="homeScreen__icon2"/> } value={"Login"}/>
     </div>}
     </div>

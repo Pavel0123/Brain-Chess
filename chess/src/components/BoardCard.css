@@ -10,6 +10,10 @@
   box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
 }
 
+.boardCard__container:hover{
+  background-color: #201e1c;
+}
+
 .boardCard__card{
   margin-top: 5px;
   background-color: #201e1c;

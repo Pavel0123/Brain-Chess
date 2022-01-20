@@ -24,7 +24,7 @@ export default function HomeScreen()  {
   const handleSubmit = (event) => {
     event.preventDefault();
     const name = event?.target[0]?.value + "";
-    if(name.length < 15) {
+    if(name.length < 15 && name.length > 3) {
       updateUsername(name)
     }
   }
@@ -72,7 +72,7 @@ export default function HomeScreen()  {
     <div>
     <div className="accountScreen__body">
     <div className="accountScreen__container">
-      <div className="accountScreen__shadow">
+      <div className="accountScreen__shadow clickable">
       {changeUsername ? <Input placeholder={user?.name}  height={"41px"} width={"336px"} onSubmit={handleSubmit}/> : <UserBox value={"Username:"} onClick={() => setChangeUsername(true)} text={user?.name} width={"300px"}/>}
       </div>
       <div className="accountScreen__shadow">

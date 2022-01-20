@@ -6,7 +6,7 @@
 
 .playScreen__board{
   width: 360px;
-  border-radius: 5px;
+  border-radius:0px;
   overflow: hidden;
   align-items: center;
 }
@@ -95,6 +95,28 @@
   width: calc(100% - 20px);
   display: flex;
   justify-content: space-between;
+}
+
+.playScreen__player-margin{
+  margin-top: 10px;
+  margin-left: 30px;
+  width: 60px;
+  margin-right: 40px;
+}
+
+.playScreen__player-border{
+  background-color:#201e1c;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 0;
+}
+
+
+.playScreen__player-time{
+  margin-left: auto;
+  margin-right: auto;
+  width: calc(100% - 20px);
+  display: flex;
 }
 
 .playScreen__surender{

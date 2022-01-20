@@ -1,4 +1,4 @@
-const functions = require("firebase-functions");
+const functions = require("firebase-functions").region('europe-west1');
 const { database } = require("firebase-admin");
 
 exports.addDeck = functions.https.onCall(async(data, context) => {
@@ -54,6 +54,15 @@ function check(deck) {
     break
     case 6:
       counter = counter - 1;
+    break
+    case 7:
+      counter = counter - 6;
+    break
+    case 8:
+      counter = counter - 5;
+    break
+    case 9:
+      counter = counter - 2;
     break
     default:
     }

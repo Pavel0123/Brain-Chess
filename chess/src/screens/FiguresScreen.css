@@ -1,0 +1,85 @@
+.figureScreen__body{
+  display: flex;
+  justify-content: center;
+  height: 600px;
+}
+
+
+.figureScreen__board{
+  margin-top: -45px;
+}
+
+.figureScreen__board-container{
+  margin-top: 20px;
+  margin-left: 22.5px;
+  width: 315px;
+  height: 315px;
+  border-radius: 5px;
+  overflow: hidden;
+  align-items: center;
+}
+
+.figureScreen__container{
+  width: 360px;
+  display: block;
+  align-items: center;
+}
+
+.figureScreen__pieceCard{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.figureScreen__h2  {
+  margin: 10px;
+}
+
+
+.figureScreen__container-icon{
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+}
+
+
+.figureScreen__card-container{
+  background-color: #201e1c;
+  height: 80px;
+  width:50px;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: rgba(255, 217, 0, 0.1) 0px 0px 15px;
+}
+
+.figureScreen__card-container:hover{
+  background-color: black;
+}
+.figureScreen__card-text{
+  margin-top: 15px;
+  font-size: 35px;
+}
+
+.figureScreen__box{
+  background-color: #201e1c;
+  text-align: center;
+  width: 360px;
+  vertical-align: middle;
+  border-radius: 5px;
+  box-shadow: rgb(255 217 0 / 10%) 0px 0px 15px;
+}
+
+.figureScreen__p{
+  padding: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: justify;
+}
+
+.figureScreen__h2{
+  padding-top: 20px;
+}
+

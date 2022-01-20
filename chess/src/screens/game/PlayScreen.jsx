@@ -436,6 +436,68 @@ export default function PlayScreen()  {
     )
   }
 
+  function material(player) {
+    let material = 0;
+    field.map((element) => {
+      let x = element.field;
+      switch(x) {
+      case 2:
+        material+=7;
+      break
+      case 3:
+        material+=4;
+      break
+      case 4:
+        material+=3;
+      break
+      case 5:
+        material+=3;
+      break
+      case 6:
+        material+=1;
+      break
+      case 7:
+        material+=6;
+      break
+      case 8:
+        material+=5;
+      break
+      case 9:
+        material+=2;
+      break
+      case 12:
+        material-=7;
+      break
+      case 13:
+        material-=4;
+      break
+      case 14:
+        material-=3;
+      break
+      case 15:
+        material-=3;
+      break
+      case 16:
+        material-=1;
+      break
+      case 17:
+        material-=6;
+      break
+      case 18:
+        material-=5;
+      break
+      case 19:
+        material-=2;
+      break
+      default:
+      }
+    });
+    if(!player) {
+      material = material * -1;
+    }
+    return(material)
+  }
+
   return(
     <div className="playScreen__body">
       {showWinner?<div onClick={() => setShowWinner(false)} className="playScreen__win-navbar"><h1>{winner === "draw" ? "draw" : winner + " won"}</h1></div> : null}
@@ -443,26 +505,31 @@ export default function PlayScreen()  {
         {playerColor ? playerWhiteRating: playerBlackRating} {(playerColor && winner === "white") || (!playerColor && winner === "black") ? "+": "-"} {winner === "draw" ? 0 : 10}</h3></div> : null}
     <div className="playScreen__container">
     <div className="playScreen__play-container">
-    <h2>( {!playerColor? playerWhiteRating : playerBlackRating} )</h2>
+      <div className="playScreen__player-time" >      
+        <h2 className="playScreen__h2 playScreen__player-margin">{material(!playerColor) > 0 ? ("+" + material(!playerColor)) : null}</h2>
+        <h2 style={!playerTurn && !winner ? {background:"dimgrey" } : null} className="playScreen__h2 playScreen__player-border">{!playerColor? time(playerWhiteTime) : time(playerBlackTime)}</h2>
+      </div>
       <div className="playScreen__player-box">
         <h2 className="playScreen__h2" ><Icon4 className="playScreen__player-icon"/>{!playerColor? playerWhite : playerBlack}</h2>
-        <h2 className="playScreen__h2">{!playerColor? time(playerWhiteTime) : time(playerBlackTime)}</h2>
-    </div>
+        <h2 className="playScreen__h2">( {!playerColor? playerWhiteRating : playerBlackRating} )</h2>
+      </div>
       <div className="playScreen__board">
         {<Board fields={field} onClick={handleClick} />}
       </div>
       <div className="playScreen__player-box">
         <h2 className="playScreen__h2"><Icon4 className="playScreen__player-icon"/>{playerColor? playerWhite : playerBlack}</h2>
-        <h2 className="playScreen__h2">{playerColor? time(playerWhiteTime) : time(playerBlackTime)}</h2>
+        <h2 className="playScreen__h2">( {playerColor? playerWhiteRating : playerBlackRating} )</h2>
       </div>
-      <h2>( {playerColor? playerWhiteRating : playerBlackRating} )</h2>
+      <div className="playScreen__player-time" >      
+        <h2 className="playScreen__h2 playScreen__player-margin">{material(playerColor) > 0 ? ("+" + material(playerColor)) : null}</h2>
+        <h2 style={playerTurn && !winner ? {background:"dimgrey" } : null} className="playScreen__h2 playScreen__player-border">{playerColor? time(playerWhiteTime) : time(playerBlackTime)}</h2>
+      </div>
       </div>
       {winner? 
         <Return/>
       :
       <div >
         {surrend || drawed ? surrend ? <MenuSurrend/> : <MenuDraw/> : <Menu/>}
-          
       </div>
       }
     </div>
